@@ -6,3 +6,4 @@ opencv-python==4.13.0.90
 scikit-learn==1.8.0
 PyQt6==6.10.2
 torchvision==0.25.0
+tqdm==4.67.2
