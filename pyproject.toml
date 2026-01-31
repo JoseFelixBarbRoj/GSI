@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gsi"
+version = "0.1.0"
+requires-python = ">= 3.12"
+authors = [
+  {name = "José Félix Barba Rojas", email = "josefelix.barba@alu.uclm.es"},
+]
+dependencies = [
+  "pandas==3.0.0",
+  "numpy==2.4.1",
+  "torch==2.10.0",
+  "matplotlib==3.10.8",
+  "opencv-python==4.13.0.90",
+  "scikit-learn==1.8.0",
+  "PyQt6==6.10.2",
+  "torchvision==0.25.0",
+  "tqdm==4.67.2"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gsi"]
