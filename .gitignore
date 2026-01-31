@@ -4,4 +4,4 @@ data
 *.zip
 *.pyc
 __pycache__
-models
+models/*.png
