@@ -43,7 +43,8 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(Path(argv[2]) / argv[1] / 'best.pth', weights_only=True))
     tester = Tester(model=model,
                     test_dataloader=test_dataloader,
-                    acc_fn=acc_fn)
+                    acc_fn=acc_fn,
+                    device=device)
     acc = tester.eval()
 
     print(f'[SYSTEM] Accuracy: {acc:.4f}')

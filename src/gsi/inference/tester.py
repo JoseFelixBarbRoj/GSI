@@ -9,10 +9,12 @@ class Tester:
     def __init__(self, 
                  model: nn.Module,
                  test_dataloader: torch.utils.data.DataLoader,
-                 acc_fn):
-        self.model = model
+                 acc_fn,
+                 device):
+        self.model = model.to(device)
         self.test_dataloader = test_dataloader
         self.acc_fn = acc_fn
+        self.device = device
 
     def eval(self):
         pred_list = []
@@ -21,8 +23,8 @@ class Tester:
         self.model.eval()
         with torch.inference_mode():
             for images, labels in tqdm(self.test_dataloader, desc=f'[{self.__class__.__name__.upper()}] Processing test items', unit='img'):
-                logits = self.model(images)
-                pred_list.extend(logits.softmax(dim=1).argmax(dim=1).tolist())
+                logits = self.model(images.to(self.device))
+                pred_list.extend(logits.softmax(dim=1).argmax(dim=1).cpu().tolist())
                 gt_list.extend(labels.tolist())
 
         return self.acc_fn(torch.Tensor(pred_list), torch.Tensor(gt_list))

@@ -79,6 +79,7 @@ if __name__ == '__main__':
                       optimizer=optim,
                       output_path='models',
                       loss_fn=loss_fn,
-                      acc_fn=acc_fn)
+                      acc_fn=acc_fn,
+                      device=device)
     trainer.train()
     

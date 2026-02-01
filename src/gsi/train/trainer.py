@@ -22,9 +22,11 @@ class Trainer:
                  optimizer: torch.optim.Optimizer,
                  output_path: str | Path,
                  loss_fn,
-                 acc_fn):
+                 acc_fn,
+                 device):
+        self.device = device
         self.epochs = epochs
-        self.model = model
+        self.model = model.to(device)
         self.model.apply(init_weights)
         self.model_name = model_name
         self.train_dataloader = train_dataloader
@@ -43,11 +45,11 @@ class Trainer:
         self.model.train()
         for images, labels in dataloader:
             self.optimizer.zero_grad()
-            logits = self.model(images)
-            loss = self.loss_fn(logits, labels)
+            logits = self.model(images.to(self.device))
+            loss = self.loss_fn(logits, labels.to(self.device))
             loss.backward()
             self.optimizer.step()
-            acc = self.acc_fn(logits.softmax(dim=1).argmax(dim=1), labels)
+            acc = self.acc_fn(logits.softmax(dim=1).argmax(dim=1).cpu(), labels)
     
             epoch_loss += loss.item()
             epoch_acc += acc
@@ -61,9 +63,9 @@ class Trainer:
         self.model.eval()
         with torch.inference_mode():
             for images, labels in dataloader:
-                logits = self.model(images)
-                loss = self.loss_fn(logits, labels)
-                acc = self.acc_fn(logits.softmax(dim=1).argmax(dim=1), labels)
+                logits = self.model(images.to(self.device))
+                loss = self.loss_fn(logits, labels.to(self.device))
+                acc = self.acc_fn(logits.softmax(dim=1).argmax(dim=1).cpu(), labels)
         
                 epoch_loss += loss.item()
                 epoch_acc += acc
