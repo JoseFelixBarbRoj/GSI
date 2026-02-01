@@ -7,11 +7,6 @@ import torch
 from torch import nn
 import numpy as np
 
-def init_weights(model):
-    if isinstance(model, (nn.Linear, nn.Conv2d)):
-        torch.nn.init.xavier_uniform_(model.weight)
-        model.bias.data.fill_(0.01)
-
 class Trainer:
     def __init__(self, 
                  epochs,
@@ -27,7 +22,6 @@ class Trainer:
         self.device = device
         self.epochs = epochs
         self.model = model.to(device)
-        self.model.apply(init_weights)
         self.model_name = model_name
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
