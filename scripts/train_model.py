@@ -13,6 +13,8 @@ from gsi.dataset.butterfly_dataset import ButterFlyDataset
 from gsi.train.trainer import Trainer
 from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
+from gsi.models.vgg19 import VGG19
+from gsi.models.efficientnet_v2_s import EfficientNetV2
 from gsi.inference.metrics import acc_fn
 
 
@@ -56,8 +58,14 @@ if __name__ == '__main__':
         case 'ExtendedBaselineModel':
             print('[SYSTEM] Starting training with ExtendedBaselineModel architecture...')
             model = ExtendedBaselineModel(in_channels=3, num_classes=len(train_data.class_name_to_idx))
+        case 'VGG19':
+            print('[SYSTEM] Starting training with VGG19 architecture...')
+            model = VGG19(in_channels=3, num_classes=len(train_data.class_name_to_idx))
+        case 'EfficientNetV2':
+            print('[SYSTEM] Starting training with EfficientNetV2 architecture...')
+            model = EfficientNetV2(num_classes=len(train_data.class_name_to_idx))
         case _:
-            print('[SYSTEM] Error. Class should be: BaselineModel, ExtendedBaselineModel') # Completar
+            print('[SYSTEM] Error. Class should be: BaselineModel, ExtendedBaselineModel, VGG19, EfficientNetV2')
             exit(1)
 
     loss_fn = nn.CrossEntropyLoss()
