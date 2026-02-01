@@ -1,3 +1,5 @@
+from math import ceil
+
 from torch import nn
 
 class BaselineModel(nn.Module):
@@ -8,7 +10,7 @@ class BaselineModel(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=1)
-        self.fc1 = nn.Linear(16 * (height // 4) * (width // 4), num_classes)
+        self.fc1 = nn.Linear(16 * ceil(height / 4) * ceil(width / 4), num_classes)
         self.flatten = nn.Flatten()
 
     def forward(self, x):
