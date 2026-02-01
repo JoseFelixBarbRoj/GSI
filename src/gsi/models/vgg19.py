@@ -48,9 +48,10 @@ class ExtendedBaselineModel(nn.Module):
                                     nn.MaxPool2d(kernel_size=2, stride=2))
 
         self.block6 = nn.Sequential(nn.Linear(512 * ceil(height / 32) * ceil(width / 32), 4096),
+                                    nn.ReLU(),
+                                    nn.Dropout(p=0.1).
                                     nn.Linear(in_features=4096, out_features=num_classes),
-                                    nn.Flatten(),
-                                    nn.Dropout(p=0.1))
+                                    nn.Flatten())
 
     def forward(self, x):
         x = self.block1(x)
