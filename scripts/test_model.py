@@ -11,6 +11,7 @@ from gsi.dataset.butterfly_dataset import ButterFlyDataset
 from gsi.inference.tester import Tester
 from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
+from gsi.models.efficientnet_v2_s import EfficientNetV2
 from gsi.inference.metrics import acc_fn
 
 if __name__ == '__main__':
@@ -36,8 +37,11 @@ if __name__ == '__main__':
             model = BaselineModel(in_channels=3, num_classes=len(test_data.class_name_to_idx))
         case 'ExtendedBaselineModel':
             model = ExtendedBaselineModel(in_channels=3, num_classes=len(test_data.class_name_to_idx))
+        case 'EfficientNetV2':
+            print('[SYSTEM] Starting training with EfficientNetV2 architecture...')
+            model = EfficientNetV2(num_classes=len(test_data.class_name_to_idx))
         case _:
-            print('[SYSTEM] Error. Class should be: BaselineModel, ExtendedBaselineModel') # Completar
+            print('[SYSTEM] Error. Class should be: BaselineModel, ExtendedBaselineModel, EfficientNetV2')
             exit(1)
     loss_fn = nn.CrossEntropyLoss()
     model.load_state_dict(torch.load(Path(argv[2]) / argv[1] / 'best.pth', weights_only=True))
