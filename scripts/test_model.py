@@ -12,8 +12,6 @@ from gsi.inference.tester import Tester
 from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
 from gsi.models.efficientnet_v2_s import EfficientNetV2
-from gsi.inference.metrics import acc_fn
-
 if __name__ == '__main__':
     if len(argv) != 3:
         print('[SYSTEM] Usage python3 test_model.py model_class models_folder')
@@ -38,18 +36,16 @@ if __name__ == '__main__':
         case 'ExtendedBaselineModel':
             model = ExtendedBaselineModel(in_channels=3, num_classes=len(test_data.class_name_to_idx))
         case 'EfficientNetV2':
-            print('[SYSTEM] Starting training with EfficientNetV2 architecture...')
             model = EfficientNetV2(num_classes=len(test_data.class_name_to_idx))
         case _:
             print('[SYSTEM] Error. Class should be: BaselineModel, ExtendedBaselineModel, EfficientNetV2')
             exit(1)
     loss_fn = nn.CrossEntropyLoss()
-    model.load_state_dict(torch.load(Path(argv[2]) / argv[1] / 'best.pth', weights_only=True))
+    model.load_state_dict(torch.load(Path(argv[2]) / argv[1] / 'best.pth', weights_only=True, map_location=torch.device(device)))
     tester = Tester(model=model,
                     test_dataloader=test_dataloader,
-                    acc_fn=acc_fn,
+                    indices=[1,3,5],
+                    output_path=Path(argv[2]) / argv[1],
                     device=device)
-    acc = tester.eval()
-
-    print(f'[SYSTEM] Accuracy: {acc:.4f}')
+    tester.eval()
     
