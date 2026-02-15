@@ -4,16 +4,14 @@ from pathlib import Path
 import cv2
 import numpy as np
 import torch
+import torch.nn.functional as F
 
 from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
 from gsi.models.efficientnet_v2_s import EfficientNetV2
 
 def get_num_classes_from_checkpoint(checkpoint_path, model_name):
-    """
-    Carga el diccionario de pesos para averiguar cuantas clases tiene el modelo
-    mirando la dimension de la ultima capa.
-    """
+
     state_dict = torch.load(checkpoint_path, map_location='cpu', weights_only=True)
     
     key_to_check = None
@@ -28,7 +26,6 @@ def get_num_classes_from_checkpoint(checkpoint_path, model_name):
     if key_to_check and key_to_check in state_dict:
         return state_dict[key_to_check].shape[0]
     
-    print(f'[WARNING] Could not auto-detect num_classes from {key_to_check}. Defaulting to 10.')
     return 10
 
 def main():
@@ -64,18 +61,16 @@ def main():
             print(f'[ERROR] Unknown model class: {model_name}')
             sys.exit(1)
 
-    # 4. Cargar los pesos
     model.load_state_dict(torch.load(weights_path, map_location=device, weights_only=True))
     model.to(device)
     model.eval()
 
     image = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
-    
     if image is None:
         print(f'[ERROR] Failed to read image: {img_path}')
         sys.exit(1)
 
-
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = image.transpose(2, 0, 1).astype(np.float32)
     
     image /= 255.0
@@ -84,9 +79,16 @@ def main():
 
     with torch.inference_mode():
         logits = model(image_tensor)
-        prediction_idx = logits.argmax(dim=1).item()
+        
+        probabilities = torch.softmax(logits, dim=1)
+        
+        confidence, prediction_idx = torch.max(probabilities, dim=1)
+        
+        prediction_idx = prediction_idx.item()
+        confidence = confidence.item()
 
     print(f'Prediction: {prediction_idx}')
+    print(f'Confidence: {confidence:.4f}')
 
 if __name__ == '__main__':
     main()
