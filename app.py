@@ -65,12 +65,11 @@ def main():
     model.to(device)
     model.eval()
 
-    image = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
+    image = cv2.imread(str(img_path), cv2.IMREAD_COLOR_RGB)
     if image is None:
         print(f'[ERROR] Failed to read image: {img_path}')
         sys.exit(1)
 
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = image.transpose(2, 0, 1).astype(np.float32)
     
     image /= 255.0
