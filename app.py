@@ -55,10 +55,9 @@ def main():
     model.eval()
 
     def predict_image(img_p):
-        image = cv2.imread(str(img_p), cv2.IMREAD_COLOR)
+        image = cv2.imread(str(img_p), cv2.IMREAD_COLOR_RGB)
         if image is None:
             return None, None
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = image.transpose(2, 0, 1).astype(np.float32)
         image /= 255.0
         image_tensor = torch.from_numpy(image).unsqueeze(0).to(device)
