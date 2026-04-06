@@ -3,6 +3,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 import torch
+import torchvision
 import pandas as pd
 from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
@@ -60,8 +61,9 @@ def main():
             return None, None
         image = image.transpose(2, 0, 1).astype(np.float32)
         image /= 255.0
-        image_tensor = torch.from_numpy(image).unsqueeze(0).to(device)
-        
+        image_tensor = torch.from_numpy(image).to(device)
+        resize_transform = torchvision.transforms.Resize((224,224))
+        image_tensor = torch.unsqueeze(resize_transform(image_tensor), 0)
         with torch.inference_mode():
             logits = model(image_tensor)
             probabilities = torch.softmax(logits, dim=1)

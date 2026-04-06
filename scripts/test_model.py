@@ -14,7 +14,7 @@ from gsi.models.extended_baseline_model import ExtendedBaselineModel
 from gsi.models.efficientnet_v2_s import EfficientNetV2
 if __name__ == '__main__':
     if len(argv) != 3:
-        print('[SYSTEM] Usage python3 test_model.py model_class models_folder')
+        print('[SYSTEM] Usage python test_model.py model_class models_folder')
         exit(1)
 
     BATCH_SIZE = 32

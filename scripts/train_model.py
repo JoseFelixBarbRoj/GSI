@@ -20,7 +20,7 @@ from gsi.inference.metrics import acc_fn
 
 if __name__ == '__main__':
     if len(argv) != 3:
-        print('[SYSTEM] Usage python3 train_model.py model_class num_epochs')
+        print('[SYSTEM] Usage python train_model.py model_class num_epochs')
         exit(1)
         
     BATCH_SIZE = 32

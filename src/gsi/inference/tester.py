@@ -21,6 +21,7 @@ class Tester:
         self.output_path = output_path
         self.device = device
         plt.style.use('ggplot')
+        
     def eval(self):
         pred_list = []
         gt_list = []
