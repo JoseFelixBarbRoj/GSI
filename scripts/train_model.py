@@ -15,7 +15,7 @@ from gsi.models.baseline_model import BaselineModel
 from gsi.models.extended_baseline_model import ExtendedBaselineModel
 from gsi.models.vgg19 import VGG19
 from gsi.models.efficientnet_v2_s import EfficientNetV2
-from gsi.inference.metrics import acc_fn
+from gsi.inference.metrics import top1acc_fn
 
 
 if __name__ == '__main__':
@@ -76,7 +76,7 @@ if __name__ == '__main__':
                       optimizer=optim,
                       output_path='models',
                       loss_fn=loss_fn,
-                      acc_fn=acc_fn,
+                      acc_fn=top1acc_fn,
                       device=device)
     trainer.train()
     
